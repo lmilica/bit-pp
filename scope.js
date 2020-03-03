@@ -46,11 +46,42 @@
 
 // ////func6task5///
 
-// (function() {
-//     var a=12;
-//     for (i=0; i<a;i++){
-//         for(j=0;j<a;j++){
-
+// (function () {
+//     var a = 12;
+//     var res = "";
+//     for (var i = 1; i < a; i++) {
+//         for (var j = 1; j < a; j++) {
+//             res += i + " * " + j + " = " + i * j + "\n";
 //         }
 //     }
+//     console.log(res);
+    
+// })();
+
+////func6task6///
+
+// var res = (function (){
+//     var input = 25;
+//     var output = 0;
+//     output = input * 1.8 + 32;
+//     return output;
+// })();
+// console.log(res);
+
+
+////func6task7///
+
+// (function(){
+//     var arr = [1, 2, 5, "cof", false, undefined, 8, "cat"];
+//     var numberArray = [];
+//     for(var i = 0; i<arr.length; i++){
+//         if(typeof arr[i] !== "number"){
+//             continue;
+//         }
+//         numberArray.push(arr[i]);
+
+//     }
+//     numberArray.sort(function(a, b){return b - a});
+//     console.log(numberArray[0]);
+    
 // })();
