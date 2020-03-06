@@ -3,7 +3,7 @@
     function Genre(name) {
         this.name = name;
         this.getData = function () {
-            return this.name[0] + this.name[this.name.length - 1];
+            return (this.name[0] + this.name[this.name.length - 1]).toUpperCase();
         }
     }
     function Movie(title, genre, length) {
@@ -25,7 +25,7 @@
         }
         this.getData = function () {
             var outputData = "";
-            outputData = this.date + ", ";
+            outputData = this.date.getDate() + '.' + this.date.getMonth() + '.' + this.date.getFullYear() + ", ";
             var durationOfAllMovies = 0;
             for (var i = 0; i < this.listOfMovies.length; i++) {
                 durationOfAllMovies += this.listOfMovies[i].length;
@@ -69,10 +69,10 @@
     var createFestival = new Festival("Weekend festival");
     var program1 = createProgram(new Date("03/25/2017"));
     var program2 = createProgram(new Date("03/28/2017"));
-    var movie1= createMovie("Spider-Man: Homecoming", "action", 133);
-    var movie2= createMovie("War for the Planet of the Apes", "drama", 140);
-    var movie3= createMovie("The Dark Tower", "western", 95);
-    var movie4= createMovie("Deadpool", "comedy", 108);
+    var movie1 = createMovie("Spider-Man: Homecoming", "action", 133);
+    var movie2 = createMovie("War for the Planet of the Apes", "drama", 140);
+    var movie3 = createMovie("The Dark Tower", "western", 95);
+    var movie4 = createMovie("Deadpool", "comedy", 108);
     program1.addMovie(movie1);
     program1.addMovie(movie2);
     program1.addMovie(movie3);
@@ -81,7 +81,7 @@
     createFestival.addProgram(program2);
 
     console.log(createFestival.getData());
-    
+
 
 
 })();
