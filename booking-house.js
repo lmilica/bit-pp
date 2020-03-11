@@ -1,98 +1,103 @@
 `use strict`;
 (function () {
 
-    function Country(name, odds, continent) {
-        this.name = name;
-        this.odds = odds;
-        this.continent = continent;
-    }
-    function Person(name, surname, dateOfBirth) {
-        this.name = name;
-        this.surname = surname;
-        this.dateOfBirth = new Date(dateOfBirth);
-    }
-    Person.prototype.getData = function () {
-        const age = Math.round((new Date().getTime() - this.dateOfBirth.getTime()) / 1000 / 60 / 60 / 24 / 7 / 52);
-        return `${this.name}\t${this.surname}\t${age} years old`;
+    class Country {
+        constructor(name, odds, continent) {
+            this.name = name;
+            this.odds = odds;
+            this.continent = continent;
 
-        //return ` ` + this.name + `\t ` + this.surname + `\t` + (Math.abs(Math.round((this.dateOfBirth.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24 / 7 / 52))) + ` years old`;
+        }
     }
 
-    function Player(person, betAmount, country) {
-        this.person = person;
-        this.betAmount = betAmount;
-        this.country = country;
-    }
-    Player.prototype.getData = function () {
-        const age = (Math.abs(Math.round((new Date().getTime() - this.person.dateOfBirth.getTime()) / 1000 / 60 / 60 / 24 / 7 / 52)));
-        return `\t\t${this.country.name}, ${this.country.odds * this.betAmount}eur, ${this.person.name}, ${this.person.surname}, ${age} years old`;
-        //return ` ` + this.country.name + `, ` + this.country.odds * this.betAmount + ` eur, ` + this.person.name + ` ` + this.person.surname + ` ` + (Math.abs(Math.round((this.person.dateOfBirth.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24 / 7 / 52))) + ` years old`;
-    }
-    function Address(country, city, postalCode, street, number) {
-        this.country = country;
-        this.city = city;
-        this.postalCode = postalCode;
-        this.street = street;
-        this.number = number;
-    }
-    Address.prototype.getData = function () {
-        return `\t${this.street}, ${this.number}, ${this.postalCode}${this.city}, ${this.country}`;
+    class Person {
+        constructor(name, surname, dateOfBirth) {
+            this.name = name;
+            this.surname = surname;
+            this.dateOfBirth = new Date(dateOfBirth);
+        }
+        getData() {
+            const age = Math.round((new Date().getTime() - this.dateOfBirth.getTime()) / 1000 / 60 / 60 / 24 / 7 / 52);
+            return `${this.name}\t${this.surname}\t${age} years old`;
+
+        }
     }
 
-    function BettingPlace(address) {
-        this.address = address;
-        this.listOfPlayers = [];
-    }
-    BettingPlace.prototype.getNumberOfPlayers = function () {
-        return this.listOfPlayers.length;
+
+    class Player {
+        constructor(person, betAmount, country) {
+            this.person = person;
+            this.betAmount = betAmount;
+            this.country = country;
+        }
+        getData() {
+            const age = (Math.abs(Math.round((new Date().getTime() - this.person.dateOfBirth.getTime()) / 1000 / 60 / 60 / 24 / 7 / 52)));
+            return `\t\t${this.country.name}, ${this.country.odds * this.betAmount}eur, ${this.person.name}, ${this.person.surname}, ${age} years old`;
+
+        }
     }
 
-    BettingPlace.prototype.getData = function () {
-        let sum = 0;
-        this.listOfPlayers.forEach(function (player) {
-            sum += player.betAmount;
-        })
-        // for (let i = 0; i < this.listOfPlayers.length; i++) {
-        //     sum += this.listOfPlayers[i].betAmount;
-        // }
-        return `\t${this.address.street}, ${this.address.postalCode}, ${this.address.city}, Sum of all bets : ${sum}eur`;
+    class Address {
+        constructor(country, city, postalCode, street, number) {
+            this.country = country;
+            this.city = city;
+            this.postalCode = postalCode;
+            this.street = street;
+            this.number = number;
+        }
+        getData() {
+            return `\t${this.street}, ${this.number}, ${this.postalCode}${this.city}, ${this.country}`;
+        }
     }
-    BettingPlace.prototype.addPlayer = function (player) {
-        this.listOfPlayers.push(player);
-    }
-    function BettingHouse(competition, ) {
-        this.competition = competition;
-        this.listOfBettingPlaces = [];
-        this.numberOfPLayers = 0;
 
-        this.addBettingPlace = function (bettingPlace) {
+    class BettingPlace {
+        constructor(address) {
+            this.address = address;
+            this.listOfPlayers = [];
+        }
+        getNumberOfPlayers() {
+            return this.listOfPlayers.length;
+        }
+        getData() {
+            let sum = 0;
+            this.listOfPlayers.forEach(function (player) {
+                sum += player.betAmount;
+            })
+
+            return `\t${this.address.street}, ${this.address.postalCode}, ${this.address.city}, Sum of all bets : ${sum}eur`;
+        }
+        addPlayer(player) {
+            this.listOfPlayers.push(player);
+
+        }
+    }
+
+    class BettingHouse {
+        constructor(competition) {
+            this.competition = competition;
+            this.listOfBettingPlaces = [];
+            this.numberOfPLayers = 0;
+        }
+
+        addBettingPlace(bettingPlace) {
             this.listOfBettingPlaces.push(bettingPlace);
             this.numberOfPLayers += bettingPlace.getNumberOfPlayers();
         }
+        getData() {
+            let res = ``;
+            this.listOfBettingPlaces.forEach(function (bettingPlace) {
+                res += `${bettingPlace.getData()}\n`;
+
+                bettingPlace.listOfPlayers.forEach(function (player) {
+                    res += `${player.getData()}\n`;
+                })
+            });
+
+            return `${this.competition}, ${this.listOfBettingPlaces.length} betting places, ${this.numberOfPLayers} bets,\n${res}`;
+        }
 
     }
-    BettingHouse.prototype.getData = function () {
-        let res = ``;
-        this.listOfBettingPlaces.forEach(function (bettingPlace) {
-            res += `${bettingPlace.getData()}\n`;
 
-            bettingPlace.listOfPlayers.forEach(function (player) {
-                res += `${player.getData()}\n`;
-            })
-        });
-
-
-
-        // for (let i = 0; i < this.listOfBettingPlaces.length; i++) {
-        //     res += this.listOfBettingPlaces[i].getData() + '\n';
-        //     for (let j = 0; j < this.listOfBettingPlaces[i].listOfPlayers.length; j++) {
-        //         res += this.listOfBettingPlaces[i].listOfPlayers[j].getData() + `\n`;
-        //     }
-        // }
-
-        return `${this.competition}, ${this.listOfBettingPlaces.length} betting places, ${this.numberOfPLayers} bets,\n${res}`;
-
-    }
     const CONTINENTS = Object.freeze({
         EUROPE: `EU`,
         ASIA: `AS`,
@@ -146,6 +151,7 @@
 
 
 
+    console.log('THIS IS A BRANCHING TEST');
 
 
 
