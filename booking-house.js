@@ -12,7 +12,10 @@
         this.dateOfBirth = new Date(dateOfBirth);
     }
     Person.prototype.getData = function () {
-        return ` ` + this.name + `\t ` + this.surname + `\t` + (Math.abs(Math.round((this.dateOfBirth.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24 / 7 / 52))) + ` years old`;
+        const age = Math.round((new Date().getTime() - this.dateOfBirth.getTime()) / 1000 / 60 / 60 / 24 / 7 / 52);
+        return `${this.name}\t${this.surname}\t${age} years old`;
+
+        //return ` ` + this.name + `\t ` + this.surname + `\t` + (Math.abs(Math.round((this.dateOfBirth.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24 / 7 / 52))) + ` years old`;
     }
 
     function Player(person, betAmount, country) {
@@ -21,7 +24,9 @@
         this.country = country;
     }
     Player.prototype.getData = function () {
-        return ` ` + this.country.name + `, ` + this.country.odds * this.betAmount + ` eur, ` + this.person.name + ` ` + this.person.surname + ` ` + (Math.abs(Math.round((this.person.dateOfBirth.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24 / 7 / 52))) + ` years old`;
+        const age = (Math.abs(Math.round((new Date().getTime() - this.person.dateOfBirth.getTime()) / 1000 / 60 / 60 / 24 / 7 / 52)));
+        return `\t\t${this.country.name}, ${this.country.odds * this.betAmount}eur, ${this.person.name}, ${this.person.surname}, ${age} years old`;
+        //return ` ` + this.country.name + `, ` + this.country.odds * this.betAmount + ` eur, ` + this.person.name + ` ` + this.person.surname + ` ` + (Math.abs(Math.round((this.person.dateOfBirth.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24 / 7 / 52))) + ` years old`;
     }
     function Address(country, city, postalCode, street, number) {
         this.country = country;
@@ -31,8 +36,9 @@
         this.number = number;
     }
     Address.prototype.getData = function () {
-        return ` ` + this.street + ` ` + this.number + `, ` + this.postalCode + this.city + `, ` + this.country;
+        return `\t${this.street}, ${this.number}, ${this.postalCode}${this.city}, ${this.country}`;
     }
+
     function BettingPlace(address) {
         this.address = address;
         this.listOfPlayers = [];
@@ -43,10 +49,13 @@
 
     BettingPlace.prototype.getData = function () {
         let sum = 0;
-        for (let i = 0; i < this.listOfPlayers.length; i++) {
-            sum += this.listOfPlayers[i].betAmount;
-        }
-        return ` ` + this.address.street + `, ` + this.address.postalCode + `, ` + this.address.city + `, sum of all bets : ` + sum + `eur`;
+        this.listOfPlayers.forEach(function (player) {
+            sum += player.betAmount;
+        })
+        // for (let i = 0; i < this.listOfPlayers.length; i++) {
+        //     sum += this.listOfPlayers[i].betAmount;
+        // }
+        return `\t${this.address.street}, ${this.address.postalCode}, ${this.address.city}, Sum of all bets : ${sum}eur`;
     }
     BettingPlace.prototype.addPlayer = function (player) {
         this.listOfPlayers.push(player);
@@ -63,16 +72,26 @@
 
     }
     BettingHouse.prototype.getData = function () {
-        let res = 0;
-        for (let i = 0; i < this.listOfBettingPlaces.length; i++) {
-            res += this.listOfBettingPlaces[i].getData() + '\n';
-            for (let j = 0; j < this.listOfBettingPlaces[i].listOfPlayers.length; j++) {
-                res += this.listOfBettingPlaces[i].listOfPlayers[j].getData() + `\n`;
-            }
-        }
+        let res = ``;
+        this.listOfBettingPlaces.forEach(function (bettingPlace) {
+            res += `${bettingPlace.getData()}\n`;
 
-        return `` + this.competition + `, ` + this.listOfBettingPlaces.length + ` betting places, ` + this.numberOfPLayers + ` bets\n`
-            + res;
+            bettingPlace.listOfPlayers.forEach(function (player) {
+                res += `${player.getData()}\n`;
+            })
+        });
+
+
+
+        // for (let i = 0; i < this.listOfBettingPlaces.length; i++) {
+        //     res += this.listOfBettingPlaces[i].getData() + '\n';
+        //     for (let j = 0; j < this.listOfBettingPlaces[i].listOfPlayers.length; j++) {
+        //         res += this.listOfBettingPlaces[i].listOfPlayers[j].getData() + `\n`;
+        //     }
+        // }
+
+        return `${this.competition}, ${this.listOfBettingPlaces.length} betting places, ${this.numberOfPLayers} bets,\n${res}`;
+
     }
     const CONTINENTS = Object.freeze({
         EUROPE: `EU`,
@@ -127,7 +146,7 @@
 
 
 
-    const player1 = new Player
+
 
 
 })();
